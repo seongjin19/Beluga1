@@ -7,14 +7,13 @@ bool FBelugaStringTest::RunTest(const FString& Parameters)
 {
 	// 생성, 대입
 	{
-		TestTrue(TEXT("AlwaysFail"), false);
+		TestTrue(TEXT("AlwaysFail"), true);
 		
 		//C
 		FString Printf(TEXT("%d %f"));
 		
 
 		//C#
-		return true;
 
 
 		/*FString strChar("char");
@@ -27,10 +26,10 @@ bool FBelugaStringTest::RunTest(const FString& Parameters)
 	}
 	//대입 연산자=
 	{
+		// 다른 메모리에 저장
 		FString str(TEXT("apple"));
 		FString copy = str;
-		TestTrue(TEXT("True"), str == copy);
-
+		TestTrue(TEXT("Equal"), str == copy);
 	}
 	// Printf
 	{
@@ -73,6 +72,100 @@ bool FBelugaStringTest::RunTest(const FString& Parameters)
 			TestTrue(TEXT("Operator <"), strApple < strBanana);
 		}
 	}
+
+	//TCHAR* 얻기
+	{
+		FString str(TEXT("hello"));
+		const TCHAR* adress = *str;
+	}
+	//operator*
+	{
+		// 같은 메모리에 저장
+		FString str(TEXT("hello"));
+		FString *str1 = &str;
+		TestEqual(TEXT("Operator*"), *str1, str.operator*());
+	}
+	// 길이 구하기
+	{
+		FString str(TEXT("HI"));
+		TestEqual(TEXT("Lenght"), 2, str.Len());
+	}
+
+	// Replace
+	{
+		FString str(TEXT("Bad"));
+		str = str.Replace(TEXT("Bad"), TEXT("Good"), ESearchCase::CaseSensitive);
+		TestEqual(TEXT("Replace"), TEXT("Good"), str);
+	}
+
+	//Insert
+	{
+		FString str("ello");
+		str.InsertAt(0, 'H');
+		TestEqual(TEXT("Insert"), "Hello", str);
+	}
+
+	//clear
+	{
+		FString str("clear");
+		str.Empty();
+		TestEqual(TEXT("Clear"), "", str);
+	}
+
+	//Split
+	{
+		FString str("Split String");
+		FString spl1;
+		FString spl2;
+		str.Split(TEXT(" "), &spl1, &spl2);
+		TestEqual(TEXT("Split1"), spl1, TEXT("Split"));
+		TestEqual(TEXT("Split2"), spl2, TEXT("String"));
+	}
+
+	//IsEmpty
+	{
+		FString str;
+		TestEqual(TEXT("IsEmpty"), str, TEXT(""));
+	}
+
+	//Shirnk
+	{
+		FString str("RemoveAtAndShirnk");
+		str.RemoveAt(9, 3);
+		SIZE_T Arraysize = str.GetAllocatedSize();
+		TestEqual(TEXT("Before Shrink"), Arraysize, (SIZE_T)36);
+		str.Shrink();
+		Arraysize = str.GetAllocatedSize();
+		TestEqual(TEXT("Before Shrink"), Arraysize, (SIZE_T)30);
+	}
+
+	//RemoveAt할때 Shrink까지 같이 해버리기~
+	{
+		//RemoveAt(Index,지울 개수, shrink 할 것인지)
+		FString str("RemoveAtAndShirnk");
+		bool bAllowShrinking = true;
+		str.RemoveAt(9, 3, bAllowShrinking);
+	}
+
+	//Find로 인덱스 찾기 + Contains
+	{
+		FString str(TEXT("Find String"));
+		//Contains(찾을 서브 스트링, 대소 문자 구분여부, 앞,뒤 시작지점 구분)
+		bool bContains = str.Contains(TEXT("Find"), ESearchCase::CaseSensitive, ESearchDir::FromStart);
+		//Find(찾을 서브 스트링, 대소 문자 구분 여부, 앞,뒤 시작지점 구분, 시작할 위치)
+		int FindIndex1 = str.Find(TEXT("Find"), ESearchCase::CaseSensitive, ESearchDir::FromStart, INDEX_NONE);
+		int FindIndex2 = str.Find(TEXT("Find"), ESearchCase::CaseSensitive, ESearchDir::FromStart, 6);
+
+		TestEqual(TEXT("Contains"), true, bContains);
+		UE_LOG(LogBeluga, Log, TEXT("%d"), FindIndex1);
+		UE_LOG(LogBeluga, Log, TEXT("%d"), FindIndex2);
+	}
+
+	//Left
+	//Right
+	//Mid
+
+	//대문자로 변환, 소문자로 변환
 
 	return true;
 }
