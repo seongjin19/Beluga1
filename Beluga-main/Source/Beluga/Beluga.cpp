@@ -1,15 +1,21 @@
 #include "BelugaMinimal.h"
 DEFINE_LOG_CATEGORY(LogBeluga);
 
+bool isRabbit(FName check)
+{
+	static const FName Rabbit = FName(TEXT("Rabbit"));
+	return check == Rabbit;
+}
 class FBelugaModule : public FDefaultGameModuleImpl
 {
 public:
-	virtual void StartupModule() override  //로딩되기만 하면 불려지는 함수
+	virtual void StartupModule() override
 	{
-		UE_LOG(LogBeluga, Display, TEXT("BelugaModule::StartupModule"));
+		FName test = FName(TEXT("Rabbit"));
+		bool bResult = isRabbit(test);
+		UE_LOG(LogBeluga, Display, TEXT("Result : %i"), bResult);
 
-		extern void StringTest();
-		StringTest();
+		UE_LOG(LogBeluga, Display, TEXT("BelugaModule::StartupModule"));
 	}
 	virtual void ShutdownModule() override
 	{
