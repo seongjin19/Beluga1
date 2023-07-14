@@ -80,7 +80,7 @@ bool FBelugaStringTest::RunTest(const FString& Parameters)
 	}
 	//operator*
 	{
-		// 같은 메모리에 저장
+		// 동일한 메모리 주소
 		FString str(TEXT("hello"));
 		FString *str1 = &str;
 		TestEqual(TEXT("Operator*"), *str1, str.operator*());
