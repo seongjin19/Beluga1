@@ -1,6 +1,4 @@
 #include "BelugaMinimal.h"
-#include "Reflection/MyGameMode.h"
-
 
 DEFINE_LOG_CATEGORY(LogBeluga);
 
@@ -10,8 +8,6 @@ public:
 	virtual void StartupModule() override
 	{
 		UE_LOG(LogBeluga, Display, TEXT("BelugaModule::StartupModule"));
-
-		
 	}
 	virtual void ShutdownModule() override
 	{
